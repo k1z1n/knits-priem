@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\AdmissionDocument;
+use App\Models\Commission;
+use App\Models\Department;
+use App\Models\Document;
+use App\Models\DressCodeItem;
+use App\Models\Faq;
+use App\Models\Modal;
+use App\Models\Specialty;
+use Illuminate\Http\Request;
+
+class PageController extends Controller
+{
+    public function showMainPage() {
+        $contacts = Commission::all();
+        $admissionDocuments = AdmissionDocument::all();
+        $modals = Modal::where('is_active', true)->orderBy('delay_seconds')->get();
+        $dressCodeItems = DressCodeItem::where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get()
+            ->groupBy('group');
+        return view('pages.main', compact('admissionDocuments', 'contacts', 'modals', 'dressCodeItems'));
+    }
+    public function showSpecialitiesPage() {
+        $specialities = Specialty::all();
+        return view('pages.specialitites', compact('specialities'));
+    }
+    public function showSpecialityPage($id) {
+        $speciality = Specialty::with([
+            'cycleCommission.head',
+            'department.head',
+        ])->findOrFail($id);
+
+        $universalDepartment = Department::with('head')
+            ->where('is_universal', true)
+            ->first();
+
+        return view('pages.speciality', compact('speciality', 'universalDepartment'));
+    }
+    public function showDocumentsPage() {
+        $documents = Document::all();
+        return view('pages.documents', compact('documents'));
+    }
+    public function showFaqPage() {
+        $faqs = Faq::all();
+        return view('pages.faq', compact('faqs'));
+    }
+    public function showContactsPage() {
+        $contacts = Commission::all();
+        return view('pages.contacts', compact('contacts'));
+    }
+    public function showNumbersPage() {
+        $specialities = Specialty::where('is_active', true)
+            ->orderBy('sort_order')
+            ->get();
+
+        return view('pages.numbers', compact('specialities'));
+    }
+    public function showRatingPage() {
+        return view('pages.rating');
+    }
+}

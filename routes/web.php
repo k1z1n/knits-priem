@@ -1,0 +1,15 @@
+<?php
+
+use App\Http\Controllers\PageController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', [PageController::class, 'showMainPage'])->name('view.main');
+
+Route::get('/specialities', [PageController::class, 'showSpecialitiesPage'])->name('view.specialities');
+Route::get('/speciality/{id}', [PageController::class, 'showSpecialityPage'])->name('view.speciality');
+
+Route::get('/documents', [PageController::class, 'showDocumentsPage'])->name('view.documents');
+Route::get('/faq', [PageController::class, 'showFaqPage'])->name('view.faq');
+Route::get('/contacts', [PageController::class, 'showContactsPage'])->name('view.contacts');
+Route::get('/numbers', [PageController::class, 'showNumbersPage'])->name('view.numbers');
+Route::get('/rating', [PageController::class, 'showRatingPage'])->name('view.rating');
