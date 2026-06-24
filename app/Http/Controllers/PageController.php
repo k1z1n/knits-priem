@@ -33,11 +33,11 @@ class PageController extends Controller
         return view('pages.specialitites', compact('specialities'));
     }
 
-    public function showSpecialityPage($id) {
-        $speciality = Specialty::with([
+    public function showSpecialityPage(Specialty $speciality) {
+        $speciality->load([
             'cycleCommission.head',
             'department.head',
-        ])->findOrFail($id);
+        ]);
 
         $universalDepartment = Department::with('head')
             ->where('is_universal', true)

@@ -57,7 +57,7 @@
                         @forelse($specialities as $i => $speciality)
                         @php($rowTotal = $speciality->budget_places + $speciality->commercial_places)
                         @php($semesterPrice = (int) floor(($speciality->price_per_year ?? 0) / 2))
-                        <tr class="nums-row--link" data-href="{{route('view.speciality', $speciality->id)}}" tabindex="0" role="link">
+                        <tr class="nums-row--link" data-href="{{route('view.speciality', $speciality)}}" tabindex="0" role="link">
                             <td data-label="№">{{$i + 1}}</td>
                             <td data-label="Код"><span class="nums-code">{{$speciality->code}}</span></td>
                             <td data-label="Специальность">{{$speciality->title}}</td>

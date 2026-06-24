@@ -40,6 +40,14 @@ class SpecialtiesTable
                     ->limit(60)
                     ->tooltip(fn ($state) => $state),
 
+                TextColumn::make('slug')
+                    ->label('Слаг')
+                    ->searchable()
+                    ->sortable()
+                    ->copyable()
+                    ->fontFamily('mono')
+                    ->toggleable(isToggledHiddenByDefault: true),
+
                 TextColumn::make('qualification')
                     ->label('Квалификация')
                     ->searchable()

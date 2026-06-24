@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 class Specialty extends Model
 {
     protected $fillable = [
         'title',
+        'slug',
         'qualification',
         'code',
         'cycle_commission_id',
@@ -37,6 +39,46 @@ class Specialty extends Model
         'core_subjects' => 'array',
         'is_active'     => 'boolean',
     ];
+
+    protected static function booted(): void
+    {
+        // Если слаг не задан вручную — генерируем его из названия
+        static::saving(function (Specialty $specialty) {
+            if (blank($specialty->slug) && filled($specialty->title)) {
+                $specialty->slug = static::generateUniqueSlug($specialty->title, $specialty->getKey());
+            }
+        });
+    }
+
+    /**
+     * Сгенерировать уникальный слаг на основе названия.
+     */
+    public static function generateUniqueSlug(string $title, ?int $ignoreId = null): string
+    {
+        $base = Str::slug($title) ?: 'speciality';
+        $slug = $base;
+        $i = 2;
+
+        while (
+            static::query()
+                ->where('slug', $slug)
+                ->when($ignoreId, fn ($query) => $query->whereKeyNot($ignoreId))
+                ->exists()
+        ) {
+            $slug = $base . '-' . $i;
+            $i++;
+        }
+
+        return $slug;
+    }
+
+    /**
+     * Привязка маршрута идёт по слагу: /speciality/{slug}.
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
     protected function studyFormLabel(): Attribute
     {
         return Attribute::make(

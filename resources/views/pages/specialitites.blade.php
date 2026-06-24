@@ -42,7 +42,7 @@
                             <li class="spec-chip spec-chip--level"><span class="spec-chip__label">На базе</span><span class="spec-chip__value">9 классов</span></li>
                             <li class="spec-chip spec-chip--form"><span class="spec-chip__label">Форма</span><span class="spec-chip__value">{{$speciality->study_form_label}}</span></li>
                         </ul>
-                        <a href="{{route('view.speciality', $speciality->id)}}" class="spec-card__link">
+                        <a href="{{route('view.speciality', $speciality)}}" class="spec-card__link">
                             <span>Подробнее</span>
                             <span class="spec-card__arrow" aria-hidden="true">→</span>
                         </a>

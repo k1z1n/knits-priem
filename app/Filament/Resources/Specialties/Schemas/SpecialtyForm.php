@@ -9,8 +9,10 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Support\RawJs;
+use Illuminate\Support\Str;
 
 class SpecialtyForm
 {
@@ -28,6 +30,24 @@ class SpecialtyForm
                         ->required()
                         ->minLength(5)
                         ->maxLength(255)
+                        ->live(onBlur: true)
+                        ->afterStateUpdated(function (string $operation, ?string $state, Set $set) {
+                            // Автозаполняем слаг из названия только при создании,
+                            // чтобы у уже опубликованных страниц адрес не менялся.
+                            if ($operation === 'create') {
+                                $set('slug', Str::slug((string) $state));
+                            }
+                        })
+                        ->columnSpanFull(),
+
+                    TextInput::make('slug')
+                        ->label('Слаг (адрес страницы)')
+                        ->helperText('Используется в URL: /speciality/слаг. Только латиница, цифры и дефисы.')
+                        ->placeholder('например: razrabotchik-veb-prilozhenij')
+                        ->required()
+                        ->unique(ignoreRecord: true)
+                        ->maxLength(255)
+                        ->rules(['alpha_dash'])
                         ->columnSpanFull(),
 
                     TextInput::make('qualification')

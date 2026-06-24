@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('specialties', function (Blueprint $table) {
-            $table->dropUnique('title');
-        });
+        // Сбрасываем уникальный индекс только если он действительно есть,
+        // иначе миграция падает на БД, где индекса уже нет.
+        if (Schema::hasIndex('specialties', ['title'], 'unique')) {
+            Schema::table('specialties', function (Blueprint $table) {
+                $table->dropUnique(['title']);
+            });
+        }
     }
 
     /**
@@ -21,8 +25,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('specialties', function (Blueprint $table) {
-            $table->unique('title');
-        });
+        if (! Schema::hasIndex('specialties', ['title'], 'unique')) {
+            Schema::table('specialties', function (Blueprint $table) {
+                $table->unique('title');
+            });
+        }
     }
 };

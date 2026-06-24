@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PageController::class, 'showMainPage'])->name('view.main');
 
 Route::get('/specialities', [PageController::class, 'showSpecialitiesPage'])->name('view.specialities');
-Route::get('/speciality/{id}', [PageController::class, 'showSpecialityPage'])->name('view.speciality');
+Route::get('/speciality/{speciality}', [PageController::class, 'showSpecialityPage'])->name('view.speciality');
 
 Route::get('/documents', [PageController::class, 'showDocumentsPage'])->name('view.documents');
 Route::get('/faq', [PageController::class, 'showFaqPage'])->name('view.faq');
