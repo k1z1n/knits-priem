@@ -165,8 +165,23 @@
                                     Запись — на одно заявление; сопровождающих учитывать не нужно. При желании
                                     можно прийти в порядке живой очереди.
                                 </p>
-				<iframe src="https://rubitime.ru/api/get-project/ea4e5c3178914c2818a0be78171f156d9411bc0ef69958c220792549e87a98fa?rvtype=iframe&amp;noscroll=1" id="rubitime-project__iframe-static" style="width: 100%; height: 660px; border: 0px;"></iframe>
-<script>(function() {if (typeof(rubitimeIframeIsLoaded) != "boolean") { var rpis = document.getElementsByClassName("rubitime-project-iframe")[0];var rpisi = document.createElement("iframe");rpisi.src = rpis.getAttribute("href");rpisi.src = rpisi.src.indexOf("?") >= 0 ? rpisi.src+"&rvtype=iframe&noscroll=1" : rpisi.src+"?rvtype=iframe&noscroll=1";rpisi.style.width="100%";rpisi.style.height="660px";rpisi.style.border="0";rpisi.id = 'rubitime-project__iframe-static';rpis.parentNode.replaceChild(rpisi, rpis); var rubiEventMethod=window.addEventListener?"addEventListener":"attachEvent",rubiEventer=window[rubiEventMethod],rubiMessageEvent="attachEvent"==rubiEventMethod?"onmessage":"message";rubiEventer(rubiMessageEvent,function(e){if(e.data!=undefined && typeof(e.data)=="string" -1!=e.data.indexOf("height")){var t=JSON.parse(e.data);if(0!=t.height&&"static"==t.type){var i=document.getElementById("rubitime-project__iframe-static");i&&(i.style.height=Math.round(t.height)+20+"px")} if (t.type == "loadpage" && t.scroll == "yes" && (document.getElementById("rubitime-project-shadow") == null || document.getElementById("rubitime-project-shadow").style.display == "none")) {if (typeof(jQuery) != "undefined") {jQuery("html, body").animate({ scrollTop: $("#rubitime-project__iframe-static").offset().top});} else {document.getElementById("rubitime-project__iframe-static").scrollIntoView()}} }},!1);} var rubitimeEls = document.getElementsByClassName("rubitime-project-iframe"); var ri = 0; while(rubitimeEls.length > ri){rubitimeEls[ri].style.display = "none"; ri++;} })(); var rubitimeIframeIsLoaded = true;</script>
+				<iframe src="https://rubitime.ru/api/get-project/ea4e5c3178914c2818a0be78171f156d9411bc0ef69958c220792549e87a98fa?rvtype=iframe" id="rubitime-project__iframe-static" style="width: 100%; height: 660px; min-height: 660px; border: 0px;"></iframe>
+<script>
+                                    /* Авто-ресайз iframe Rubitime: слушаем сообщения о высоте
+                                       и подгоняем высоту, чтобы поля формы (появляются после
+                                       выбора даты) не обрезались под блоком ниже. */
+                                    (function () {
+                                        var IFRAME_ID = 'rubitime-project__iframe-static';
+                                        window.addEventListener('message', function (e) {
+                                            if (typeof e.data !== 'string' || e.data.indexOf('height') === -1) return;
+                                            var data;
+                                            try { data = JSON.parse(e.data); } catch (err) { return; }
+                                            if (!data || data.type !== 'static' || !data.height) return;
+                                            var iframe = document.getElementById(IFRAME_ID);
+                                            if (iframe) iframe.style.height = (Math.round(data.height) + 20) + 'px';
+                                        }, false);
+                                    })();
+                                </script>
                                 <aside class="admission-flow__note">
                                     Заполните личный кабинет дома, в спокойной обстановке — это повысит точность
                                     данных и ускорит визит.

@@ -10,8 +10,10 @@ class ForceHttps
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $request->server->set('HTTPS', 'on');
-        $request->server->set('SERVER_PORT', 443);
+        if (app()->environment('production')) {
+            $request->server->set('HTTPS', 'on');
+            $request->server->set('SERVER_PORT', 443);
+        }
         return $next($request);
     }
 }
