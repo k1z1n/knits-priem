@@ -60,6 +60,17 @@
         overflow-x: auto;
     }
 
+    /* Скрываем пустые «хвосты» от спарсенного контента, которые рисуются как тонкие полоски */
+    .rating-content > hr,
+    .rating-content > p:empty,
+    .rating-content > div:empty,
+    .rating-content tr:empty {
+        display: none;
+    }
+    .rating-content table:not(:has(th)):not(:has(td)) {
+        display: none;
+    }
+
     .rating-content table {
         width: 100%;
         border-collapse: collapse;

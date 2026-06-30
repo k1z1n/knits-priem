@@ -51,13 +51,13 @@
                                  height="20">
                         </span>
                         </a>
-                        {{-- <a class="quick-link-card" href="{{route('view.rating')}}">
+                        <a class="quick-link-card" href="{{route('view.rating')}}">
                             <span class="quick-link-card__text">Рейтинг абитуриентов</span>
                             <span class="quick-link-card__icon">
                             <img src="{{asset('media/images/icons/иконка%20перехода.svg')}}" alt="" width="20"
                                  height="20">
                         </span>
-                        </a>--}}
+                        </a>
                         <a class="quick-link-card" href="{{route('view.faq')}}">
                             <span class="quick-link-card__text">Часто задаваемые вопросы</span>
                             <span class="quick-link-card__icon">

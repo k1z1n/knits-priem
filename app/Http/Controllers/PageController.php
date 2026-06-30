@@ -75,7 +75,7 @@ class PageController extends Controller
             $id = '0';
         }
 
-        $content = Cache::remember("rating_content_{$id}_v3", 600, function () use ($id) {
+        $content = Cache::remember("rating_content_{$id}_v6", 600, function () use ($id) {
             try {
                 $response = Http::timeout(15)
                     ->withHeaders([
@@ -144,6 +144,43 @@ class PageController extends Controller
         // 1. Все заголовки H1-H6 (наш собственный H1 уже не нужен, плюс там были три H6-уведомления и H2-подзаголовок)
         foreach ($xpath->query('.//h1 | .//h2 | .//h3 | .//h4 | .//h5 | .//h6', $contentNode) as $node) {
             $toRemove->attach($node);
+        }
+
+        // 1b. Параграфы/обёртки, в которых остался текст «Рейтинг абитуриентов»
+        foreach ($xpath->query('.//p | .//div | .//strong | .//b | .//span', $contentNode) as $node) {
+            $text = trim(preg_replace('/\s+/u', ' ', (string) $node->textContent));
+            if ($text !== '' && mb_stripos($text, 'рейтинг абитуриентов') !== false && mb_strlen($text) <= 40) {
+                $toRemove->attach($node);
+            }
+        }
+
+        // 1c. Горизонтальные разделители и пустые параграфы/div, которые рисуются как тонкие линии над таблицей
+        foreach ($xpath->query('.//hr', $contentNode) as $node) {
+            $toRemove->attach($node);
+        }
+        foreach ($xpath->query('.//p | .//div', $contentNode) as $node) {
+            // Если внутри есть таблица/список/картинка — не трогаем
+            if ($xpath->query('.//table | .//img | .//ul | .//ol | .//figure | .//form', $node)->length > 0) {
+                continue;
+            }
+            $text = trim(preg_replace('/\s+|&nbsp;|\x{00A0}/u', '', (string) $node->textContent));
+            if ($text === '') {
+                $toRemove->attach($node);
+            }
+        }
+
+        // 1d. Пустые строки и пустые таблицы (часто оставляют тонкие границы над основной таблицей)
+        foreach ($xpath->query('.//tr', $contentNode) as $node) {
+            $text = trim(preg_replace('/\s+|&nbsp;|\x{00A0}/u', '', (string) $node->textContent));
+            if ($text === '') {
+                $toRemove->attach($node);
+            }
+        }
+        foreach ($xpath->query('.//table', $contentNode) as $node) {
+            $text = trim(preg_replace('/\s+|&nbsp;|\x{00A0}/u', '', (string) $node->textContent));
+            if ($text === '') {
+                $toRemove->attach($node);
+            }
         }
 
         // 2. Все ссылки переключателя (любые href, где есть и "rank", и "id=")
