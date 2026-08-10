@@ -8,7 +8,6 @@ use App\Models\Department;
 use App\Models\Document;
 use App\Models\DressCodeItem;
 use App\Models\Faq;
-use App\Models\Modal;
 use App\Models\Specialty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -19,13 +18,12 @@ class PageController extends Controller
     public function showMainPage() {
         $contacts = Commission::all();
         $admissionDocuments = AdmissionDocument::all();
-        $modals = Modal::where('is_active', true)->orderBy('delay_seconds')->get();
         $dressCodeItems = DressCodeItem::where('is_active', true)
             ->orderBy('sort_order')
             ->orderBy('id')
             ->get()
             ->groupBy('group');
-        return view('pages.main', compact('admissionDocuments', 'contacts', 'modals', 'dressCodeItems'));
+        return view('pages.main', compact('admissionDocuments', 'contacts', 'dressCodeItems'));
     }
 
     public function showSpecialitiesPage() {
