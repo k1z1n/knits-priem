@@ -10,13 +10,16 @@
 </head>
 <body>
 <div class="page">
-    @include('partials.announcement-bar')
-   @unless(request()->routeIs('view.main'))
-        @include('includes.header')
-    @endunless
+    <div class="site-top">
+        @include('partials.announcement-bar')
+        @unless(request()->routeIs('view.main'))
+            @include('includes.header')
+        @endunless
+    </div>
     @yield('content')
 
     @include('includes.footer')
 </div>
+@include('partials.site-modals')
 </body>
 </html>
