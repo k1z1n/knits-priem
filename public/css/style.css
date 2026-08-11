@@ -1862,26 +1862,18 @@ body {
 }
 
 /* ── SITE HEADER (specialities page) ── */
-/* ── ЛИПКАЯ ВЕРХУШКА (плашка + шапка едут вместе) ── */
-.site-top {
-    position: sticky;
-    top: 0;
-    z-index: 60;
-}
-
-/* Прилипанием управляет .site-top, собственный sticky шапке больше не нужен */
-.site-top .site-header {
-    position: static;
-}
-
 /* ── ПЛАШКА-ОБЪЯВЛЕНИЕ ──────────── */
+/* Липкая: едет вместе с шапкой. Фактическую высоту JS кладёт в --sticky-bar-h,
+   шапка липнет на top: var(--sticky-bar-h), т.е. ровно под плашкой. */
 .announcement-bar {
     background: linear-gradient(135deg, #fde047, #f59e0b);
     color: #3b2a05;
     font-size: 14px;
     line-height: 1.45;
     padding: 10px 0;
-    position: relative;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
     z-index: 60;
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
@@ -1938,8 +1930,10 @@ body {
 }
 
 .site-header {
+    position: -webkit-sticky;
     position: sticky;
-    top: 0;
+    /* Под липкой плашкой-объявлением; без плашки (и без JS) — просто top: 0 */
+    top: var(--sticky-bar-h, 0px);
     z-index: 50;
     background: #ffffff;
     border-bottom: 1px solid rgba(15, 23, 42, 0.08);
@@ -3735,14 +3729,15 @@ body {
 }
 .nums-table thead {
     position: sticky;
-    top: 76px;
+    /* Под всей липкой верхушкой (плашка + шапка); JS держит переменную актуальной */
+    top: var(--sticky-top-h, 76px);
     z-index: 5;
 }
 
 .nums-table thead th {
     position: -webkit-sticky;
     position: sticky;
-    top: 76px;
+    top: var(--sticky-top-h, 76px);
     z-index: 5;
     background: var(--accent-color);
     color: #ffffff;

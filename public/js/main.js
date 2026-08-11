@@ -1,3 +1,27 @@
+/* Липкая верхушка: плашка-объявление + шапка.
+   Кладём фактические высоты в CSS-переменные, чтобы шапка липла ровно под
+   плашкой, а thead таблиц — под ними обеими (высота плашки переменная). */
+(function () {
+    const bar = document.querySelector('.announcement-bar');
+    const header = document.querySelector('.site-header');
+    const root = document.documentElement;
+
+    const sync = () => {
+        const barH = bar ? bar.offsetHeight : 0;
+        const headerH = header ? header.offsetHeight : 0;
+        root.style.setProperty('--sticky-bar-h', barH + 'px');
+        root.style.setProperty('--sticky-top-h', (barH + headerH) + 'px');
+    };
+
+    sync();
+    window.addEventListener('resize', sync);
+    if ('ResizeObserver' in window) {
+        const ro = new ResizeObserver(sync);
+        if (bar) ro.observe(bar);
+        if (header) ro.observe(header);
+    }
+})();
+
 const burger = document.querySelector('.site-burger');
 const nav = document.querySelector('.site-nav');
 
