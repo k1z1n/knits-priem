@@ -8,6 +8,7 @@ use App\Models\Department;
 use App\Models\Document;
 use App\Models\DressCodeItem;
 use App\Models\Faq;
+use App\Models\PageSetting;
 use App\Models\Specialty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -68,6 +69,8 @@ class PageController extends Controller
     }
 
     public function showRatingPage(Request $request) {
+        abort_unless(PageSetting::enabled(PageSetting::RATING), 404);
+
         $id = $request->query('id', '0');
         if (!in_array($id, ['0', '1'], true)) {
             $id = '0';
